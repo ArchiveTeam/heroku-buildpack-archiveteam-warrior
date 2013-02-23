@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+echo "Archive Team Warrior"
+exit 0
+

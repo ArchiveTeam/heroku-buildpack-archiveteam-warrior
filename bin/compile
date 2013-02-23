@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+BINARIES_URL=http://warriorhq.archiveteam.org/downloads/heroku-binaries/warrior-binaries-LATEST.tar.gz
+BINARIES_FILE=$CACHE_DIR/warrior-binaries.tar.gz
+
+mkdir -p $CACHE_DIR
+
+if [ ! -f $BINARIES_FILE ] ; then
+  echo "-----> Downloading Wget+Lua and rsync binaries"
+  if ! curl -s -L $BINARIES_URL -o $CACHE_DIR/warrior-binaries.tar.gz ; then
+    echo " !     Couldn't download the binaries file."
+    exit 1
+  fi
+fi
+
+echo "-----> Installing Wget+Lua and rsync"
+
+mkdir -p $BUILD_DIR/.archiveteam
+cd $BUILD_DIR/.archiveteam
+if ! tar xzf $CACHE_DIR/warrior-binaries.tar.gz ; then
+  echo " !     Couldn't extract the binaries file."
+  exit 2
+fi
+
+# set the path
+mkdir -p "$BUILD_DIR/.profile.d"
+echo 'export PATH=$HOME/.archiveteam:$PATH' >> "$BUILD_DIR/.profile.d/archiveteam.sh"
+
+# ask the Python buildpack to install the seesaw kit
+echo -e "\nseesaw\n" >> $BUILD_DIR/requirements.txt
+
+
+
+# the remainder is baed on heroku-buildpack-multi
+# it installs the Python buildpack
+
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+
+unset GIT_DIR
+
+dir=$(mktemp -t python-buildpackXXXXX)
+rm -rf $dir
+
+url="https://github.com/heroku/heroku-buildpack-python.git"
+
+if [ "$url" != "" ]; then
+  echo "-----> Downloading Python buildpack: $url"
+  git clone $url $dir >/dev/null 2>&1
+  cd $dir
+
+  chmod +x $dir/bin/{detect,compile,release}
+
+  framework=$($dir/bin/detect $1)
+
+  if [ $? == 0 ]; then
+    echo "-----> Detected framework: $framework"
+    $dir/bin/compile $BUILD_DIR $CACHE_DIR
+
+    if [ $? != 0 ]; then
+      exit 1
+    fi
+  else
+    echo " !     Did not detect Python framework."
+  fi
+
+  $dir/bin/release $BUILD_DIR > $BUILD_DIR/python_buildpack_release.out
+fi
+
