@@ -7,7 +7,7 @@ Use an empty Git repository for your application; you don't need any code.
 
 Specify this buildpack when you create your Heroku application:
 
-    heroku create app --buildpack https://github.com/ArchiveTeam/heroku-archiveteam-warrior-buildpack.git
+    heroku create app --buildpack https://github.com/ArchiveTeam/heroku-buildpack-archiveteam-warrior.git
 
 You'll need to set two configuration variables (with heroku config:set):
 
