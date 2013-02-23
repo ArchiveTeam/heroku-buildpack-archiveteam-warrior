@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 cat << EOF
 ---
-config_vars:
-  WARRIOR_PROJECT: ""
-  WARRIOR_DOWNLOADER: ""
-  WARRIOR_MAX_ITEMS: "100"
-  WARRIOR_CONCURRENT: "2"
 default_process_types:
   seesaw: ./start-warrior.sh
 EOF
