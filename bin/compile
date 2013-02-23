@@ -33,6 +33,45 @@ echo 'export PATH=$HOME/.archiveteam:$PATH' >> "$BUILD_DIR/.profile.d/archivetea
 # ask the Python buildpack to install the seesaw kit
 echo -e "\nseesaw\n" >> $BUILD_DIR/requirements.txt
 
+# make a link to wget-lua so the seesaw kit can find it
+ln -s .archiveteam/wget-lua $BUILD_DIR/wget-lua
+
+# write the boot script
+cat >> $BUILD_DIR/start-warrior.sh << EOF
+#!/bin/bash
+set -e
+
+if [ -z "\$WARRIOR_PROJECT" ] ; then
+  echo "Set the WARRIOR_PROJECT configuration variable to the project's Git repository."
+  exit 1
+fi
+
+if [ -z "\$WARRIOR_DOWNLOADER" ] ; then
+  echo "Set the WARRIOR_DOWNLOADER configuration variable to your nickname."
+  exit 1
+fi
+
+if [ -z "\$WARRIOR_MAX_ITEMS" ] ; then
+  WARRIOR_MAX_ITEMS=100
+  exit 1
+fi
+
+if [ -z "\$WARRIOR_CONCURRENT" ] ; then
+  WARRIOR_CONCURRENT=2
+  exit
+fi
+
+git clone \$WARRIOR_PROJECT project
+cd project
+
+run-pipeline \
+  --concurrent \$WARRIOR_CONCURRENT \
+  --max-items \$WARRIOR_MAX_ITEMS \
+  --disable-web-server \
+  pipeline.py \$WARRIOR_DOWNLOADER
+
+EOF
+chmod +x $BUILD_DIR/start-warrior.sh
 
 
 # the remainder is baed on heroku-buildpack-multi
@@ -72,7 +111,5 @@ if [ "$url" != "" ]; then
   else
     echo " !     Did not detect Python framework."
   fi
-
-  $dir/bin/release $BUILD_DIR > $BUILD_DIR/python_buildpack_release.out
 fi
 
