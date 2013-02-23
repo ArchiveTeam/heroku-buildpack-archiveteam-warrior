@@ -53,12 +53,10 @@ fi
 
 if [ -z "\$WARRIOR_MAX_ITEMS" ] ; then
   WARRIOR_MAX_ITEMS=100
-  exit 1
 fi
 
 if [ -z "\$WARRIOR_CONCURRENT" ] ; then
   WARRIOR_CONCURRENT=2
-  exit
 fi
 
 git clone \$WARRIOR_PROJECT project
