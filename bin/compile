@@ -108,19 +108,21 @@ else
   echo " !     Did not detect Python framework."
 fi
 
-echo
-echo "-----> Successfully installed the Archive Team Warrior buildpack"
-echo
-echo "       You'll need to set two configuration variables (heroku config:set):"
-echo "         WARRIOR_PROJECT      the URL to the Git repository of the project"
-echo "         WARRIOR_DOWNLOADER   your nickname"
-echo
-echo "       You can optionally set:"
-echo "         WARRIOR_CONCURRENT   the number of concurrent items (default: 2)"
-echo "         WARRIOR_MAX_ITEMS    the number of items to download before"
-echo "                              restarting the instance (default: 100)"
-echo
-echo "       To start an instance:"
-echo "         heroku ps:scale seesaw=1"
-echo
+cat <<EOF
+
+-----> Successfully installed the Archive Team Warrior buildpack
+
+       You'll need to set two configuration variables (heroku config:set):
+         WARRIOR_PROJECT      the URL to the Git repository of the project
+         WARRIOR_DOWNLOADER   your nickname
+
+       You can optionally set:
+         WARRIOR_CONCURRENT   the number of concurrent items (default: 2)
+         WARRIOR_MAX_ITEMS    the number of items to download before
+                              restarting the instance (default: 100)
+
+       To start an instance:
+         heroku ps:scale seesaw=1
+
+EOF
 
