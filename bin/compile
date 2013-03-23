@@ -93,7 +93,7 @@ echo "-----> Downloading Python buildpack: $url"
 git clone $url $dir >/dev/null 2>&1
 cd $dir
 
-latest_tag="v$( git tag -l | grep -E '^v[0-9]+$' | cut -c 2- | sort -h | tail -n 1 )"
+latest_tag="v$( git tag -l | grep -E '^v[0-9]+$' | cut -c 2- | sort -n | tail -n 1 )"
 echo "-----> Checking out tag: $latest_tag"
 git checkout $latest_tag 2>&1
 
