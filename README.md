@@ -7,13 +7,17 @@ You'll need the Heroku Toolbelt: https://toolbelt.heroku.com/
 
 Create an empty Git repository for your application. You don't need any code.
 
-    git init yourapp
-    cd yourapp
-    git commit --allow-empty -m "First commit."
+```bash
+git init yourapp
+cd yourapp
+git commit --allow-empty -m "First commit."
+```
 
 Create your Heroku application and specify this buildpack:
 
-    heroku apps:create --buildpack https://github.com/ArchiveTeam/heroku-buildpack-archiveteam-warrior.git
+```bash
+heroku apps:create --buildpack https://github.com/ArchiveTeam/heroku-buildpack-archiveteam-warrior.git
+```
 
 Set two configuration variables (with heroku config:set):
 
@@ -21,8 +25,10 @@ Set two configuration variables (with heroku config:set):
     WARRIOR_DOWNLOADER   your nickname
 
 e.g.
-
-    heroku config:set WARRIOR_PROJECT=https://github.com/... WARRIOR_DOWNLOADER=YOURNAME
+ 
+```bash
+heroku config:set WARRIOR_PROJECT=https://github.com/... WARRIOR_DOWNLOADER=YOURNAME
+```
 
 You can optionally set:
 
@@ -36,13 +42,19 @@ You can optionally set:
 
 Push your application to Heroku. You'll see the installation messages:
 
-    git push -u heroku master
+```bash
+git push -u heroku master
+```
 
 Start an instance of the 'seesaw' process:
 
-    heroku ps:scale seesaw=1
+```bash
+heroku ps:scale seesaw=1
+```
 
 Check the logs to see if your seesaw process works:
 
-    heroku logs --tail
+```bash
+heroku logs --tail
+```
 
