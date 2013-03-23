@@ -3,16 +3,26 @@ Archive Team Warrior buildpack for Heroku
 
 This buildpack can be used to run warrior projects on Heroku. It includes the Python seesaw kit, a recent version of Wget+Lua and an Rsync binary compiled for Heroku.
 
-Use an empty Git repository for your application; you don't need any code.
+You'll need the Heroku Toolbelt: https://toolbelt.heroku.com/
 
-Specify this buildpack when you create your Heroku application:
+Create an empty Git repository for your application. You don't need any code.
 
-    heroku create app --buildpack https://github.com/ArchiveTeam/heroku-buildpack-archiveteam-warrior.git
+    git init yourapp
+    cd yourapp
+    git commit --allow-empty -m "First commit."
 
-You'll need to set two configuration variables (with heroku config:set):
+Create your Heroku application and specify this buildpack:
+
+    heroku apps:create --buildpack https://github.com/ArchiveTeam/heroku-buildpack-archiveteam-warrior.git
+
+Set two configuration variables (with heroku config:set):
 
     WARRIOR_PROJECT      the URL to the Git repository of the project
     WARRIOR_DOWNLOADER   your nickname
+
+e.g.
+
+    heroku config:set WARRIOR_PROJECT=https://github.com/... WARRIOR_DOWNLOADER=YOURNAME
 
 You can optionally set:
 
@@ -20,7 +30,19 @@ You can optionally set:
     WARRIOR_MAX_ITEMS    the number of items to download before
                          restarting the instance (default: 100)
 
-To start an instance:
+                         set this to a lower value if the tasks
+                         take a long time, or if you want to cycle
+                         your instances faster.
+
+Push your application to Heroku. You'll see the installation messages:
+
+    git push -u heroku master
+
+Start an instance of the 'seesaw' process:
 
     heroku ps:scale seesaw=1
+
+Check the logs to see if your seesaw process works:
+
+    heroku logs --tail
 
