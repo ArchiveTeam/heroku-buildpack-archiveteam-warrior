@@ -7,7 +7,7 @@ mkdir src
 cd src
 
 curl -L http://www.lua.org/ftp/lua-5.1.5.tar.gz | tar xz
-curl -L http://warriorhq.archiveteam.org/downloads/wget-lua/wget-1.14.lua.20130120-8476.tar.gz | tar xz
+curl -L http://warriorhq.archiveteam.org/downloads/wget-lua/wget-1.14.lua.LATEST.tar.bz2 |bunzip2 > wget-1.14.lua.LATEST.tar
 curl -L https://rsync.samba.org/ftp/rsync/rsync-3.0.9.tar.gz | tar xz
 
 cd lua-5.1.5
@@ -16,7 +16,9 @@ make linux
 make install
 cd ../
 
-cd wget-1.14.lua.20130120-8476
+mkdir wget-1.14.lua
+cd wget-1.14.lua
+tar --strip-components=1 -xf ../wget-1.14.lua.LATEST.tar
 CFLAGS=-I/tmp/include LDFLAGS=-L/tmp/lib ./configure --with-ssl=openssl --disable-nls
 make
 cp src/wget ../../dest/wget-lua
